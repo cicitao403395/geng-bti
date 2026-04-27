@@ -103,7 +103,7 @@ body:after{content:"梗BTI  SBTI  MEME AGE  GENG DNA";position:fixed;inset:auto 
     <div class="section"><div class="st">六种梗BTI人格</div><div class="list" id="typeList"></div></div>
     <div class="qrSection"><div class="qrTitle">关注奥星热浪，解锁更多梗圈现场</div><div class="qrGrid"><div class="qrItem"><img src="qr_douyin.png" alt="抖音二维码"><div class="qrLabel">抖音</div></div><div class="qrItem"><img src="qr_wecom.png" alt="企微二维码"><div class="qrLabel">企微</div></div><div class="qrItem"><img src="qr_xiaohongshu.png" alt="小红书二维码"><div class="qrLabel">小红书</div></div><div class="qrItem"><img src="qr_bilibili.png" alt="B站二维码"><div class="qrLabel">B站</div></div></div></div>
     <div class="finalLine">梗圈狂欢已就位，《奥星热浪》预约火热进行中！</div>
-    <div class="actions"><button class="btn" onclick="copyShare()">复制分享文案</button><button class="btn ghost" onclick="restart()">重新测试</button></div>
+    <div class="actions"><button class="btn" onclick="copyLink()">转发链接</button><button class="btn ghost" onclick="restart()">重新测试</button></div>
     <div class="note">梗BTI · 日常场景版 · 仅供娱乐</div>
   </div>
 </section>
@@ -164,9 +164,8 @@ function showResult(){
   results.forEach(t=>{const on=t.key===resultType.key;const item=document.createElement('div');item.className='item'+(on?' active':'');item.style.setProperty('--activebg',t.color+'22');item.style.setProperty('--now',t.color);item.innerHTML='<div class="itemtop"><div class="itemname" style="color:'+(on?t.color:'rgba(255,255,255,.78)')+'">'+t.name+' · '+t.range+'</div>'+(on?'<span class="now">当前</span>':'')+'</div><div class="itemdesc">'+t.tag+'</div>';list.appendChild(item)});
   show('result');
 }
-function shareText(){return `【梗BTI】我被确诊为「${resultType.name}」！\n“${resultType.tag}”\n我的梗年代指数：${avg.toFixed(2)} / 5.00\n\n20道日常场景题，测测你处于哪个梗年代。`; }
-function copyShare(){const text=shareText();if(navigator.clipboard)navigator.clipboard.writeText(text).then(()=>toast('已复制分享文案 ✓')).catch(()=>fallback(text));else fallback(text)}
-function fallback(text){const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);toast('已复制分享文案 ✓')}
+function copyLink(){const url='https://cicitao403395.github.io/geng-bti/';if(navigator.clipboard)navigator.clipboard.writeText(url).then(()=>toast('链接已复制，快去转发吧 ✓')).catch(()=>fallbackCopy(url));else fallbackCopy(url)}
+function fallbackCopy(text){const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);toast('链接已复制，快去转发吧 ✓')}
 function restart(){show('home')}
 function toast(t){const el=document.getElementById('toast');el.textContent=t;el.style.display='block';setTimeout(()=>el.style.display='none',1800)}
 </script>
