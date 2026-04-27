@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>梗BTI · 你处于哪个梗年代？</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:#0b0e13;color:#f5f5f5}
+body:before{content:"";position:fixed;inset:-25%;background:radial-gradient(circle at 20% 8%,rgba(255,107,53,.22),transparent 30%),radial-gradient(circle at 82% 80%,rgba(6,182,212,.18),transparent 38%),radial-gradient(circle at 55% 28%,rgba(168,85,247,.12),transparent 30%),linear-gradient(180deg,#0b0e13,#111827 60%,#0b0e13);z-index:-2}
+body:after{content:"梗BTI  SBTI  MEME AGE  GENG DNA";position:fixed;inset:auto -20px 20px auto;color:rgba(255,255,255,.03);font-weight:950;font-size:72px;letter-spacing:8px;z-index:-1;transform:rotate(-8deg);white-space:nowrap}
+.page{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transform:translateY(10px);transition:.35s ease;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.page.active{opacity:1;pointer-events:auto;transform:translateY(0)}
+#result.page{align-items:flex-start}
+.card{width:100%;max-width:660px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:24px;box-shadow:0 24px 90px rgba(0,0,0,.38);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);padding:28px}
+.logo{font-size:64px;font-weight:950;letter-spacing:4px;line-height:1.05;background:linear-gradient(135deg,#ff6b35,#ffc107,#4ecdc4,#a855f7);-webkit-background-clip:text;background-clip:text;color:transparent;text-align:center;margin-bottom:8px;text-shadow:0 0 40px rgba(255,107,53,.14)}
+.sub{text-align:center;font-size:20px;font-weight:900;margin-bottom:12px}
+.meta{text-align:center;color:rgba(255,255,255,.46);font:13px/1.8 "Courier New",monospace;margin-bottom:24px}
+.rule{margin:18px 0 24px;display:grid;gap:10px}
+.rule div{border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.035);border-radius:14px;padding:12px 14px;color:rgba(255,255,255,.68);font-size:13px;line-height:1.7}
+.btn{width:100%;border:0;border-radius:16px;padding:16px 18px;font-size:16px;font-weight:900;color:#fff;background:linear-gradient(135deg,#ff6b35,#ff8c42);box-shadow:0 10px 28px rgba(255,107,53,.28);cursor:pointer;transition:.2s;letter-spacing:.5px}
+.btn:active{transform:scale(.98)}
+.ghost{background:rgba(255,255,255,.08);box-shadow:none;border:1px solid rgba(255,255,255,.12)}
+.note{text-align:center;margin-top:18px;color:rgba(255,255,255,.38);font-size:12px;line-height:1.8}
+.topbar{width:100%;max-width:700px;margin:0 auto 18px}
+.progress{height:6px;background:rgba(255,255,255,.08);border-radius:10px;overflow:hidden}
+.fill{height:100%;width:0;background:linear-gradient(90deg,#ff6b35,#ffc107,#06b6d4);transition:.3s}
+.pinfo{display:flex;justify-content:space-between;color:rgba(255,255,255,.42);font-size:12px;margin-top:8px;font-family:"Courier New",monospace}
+.qtext{font-size:18px;line-height:1.75;font-weight:900;text-align:center;margin-bottom:24px;color:rgba(255,255,255,.92)}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{background:rgba(255,255,255,.055);border:1.5px solid rgba(255,255,255,.1);border-radius:16px;padding:15px 16px;color:rgba(255,255,255,.8);font-size:14px;line-height:1.65;cursor:pointer;transition:.18s;text-align:left;position:relative;overflow:hidden}
+.opt:before{content:attr(data-letter);display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.08);font-size:12px;font-weight:900;margin-right:9px;color:rgba(255,255,255,.55)}
+.opt:hover,.opt.selected{border-color:var(--accent,#ff6b35);background:rgba(255,107,53,.16);color:#fff;transform:translateY(-1px)}
+.opt.selected:before{background:var(--accent,#ff6b35);color:#fff}
+.loader{text-align:center}
+.loader .big{font-size:18px;font-weight:900;margin-bottom:18px}
+.loaderbar{width:240px;height:5px;background:rgba(255,255,255,.09);border-radius:9px;overflow:hidden;margin:auto}
+.loaderinner{height:100%;width:0;background:linear-gradient(90deg,#ff6b35,#ffc107,#06b6d4);transition:.28s}
+.resultHero{text-align:center;padding:30px 22px;border-radius:22px;margin-bottom:16px;background:linear-gradient(180deg,rgba(255,107,53,.2),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.1)}
+.badge{display:inline-block;font-size:11px;letter-spacing:1px;color:rgba(255,255,255,.72);background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:5px 12px;margin-bottom:16px}
+.code{font-size:44px;letter-spacing:4px;font-weight:950;margin-bottom:6px}
+.name{font-size:28px;font-weight:950;margin-bottom:8px}
+.tag{font-size:15px;color:rgba(255,255,255,.68);font-style:italic;line-height:1.7}
+.pills{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:16px}
+.pill{font-size:12px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:5px 11px;color:rgba(255,255,255,.78)}
+.section{background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:18px;margin-bottom:14px}
+.st{font-size:13px;color:var(--accent,#ff6b35);letter-spacing:1px;font-weight:950;margin-bottom:10px}
+.desc{color:rgba(255,255,255,.74);font-size:15px;line-height:1.9}
+.scorebox{display:grid;grid-template-columns:1fr auto;gap:8px 12px;align-items:center}
+.scorebar{height:8px;background:rgba(255,255,255,.09);border-radius:999px;overflow:hidden}
+.scorefill{height:100%;background:var(--accent,#ff6b35);border-radius:999px;width:0;transition:.7s}
+.scorelabel{font:12px/1.4 "Courier New",monospace;color:rgba(255,255,255,.52)}
+.list{display:grid;gap:8px}
+.item{border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.035);border-radius:13px;padding:12px 14px}
+.item.active{border-width:2px;background:var(--activebg)}
+.itemtop{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:5px}
+.itemname{font-size:14px;font-weight:950}
+.now{font-size:10px;background:var(--now);color:#fff;border-radius:999px;padding:2px 8px}
+.itemdesc{font-size:12px;color:rgba(255,255,255,.42);line-height:1.6}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.actions .btn{flex:1;min-width:150px}
+.qrSection{background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:18px;margin:14px 0}
+.qrTitle{font-size:13px;color:var(--accent,#ff6b35);letter-spacing:1px;font-weight:950;margin-bottom:14px}
+.qrGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.qrItem{border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.035);border-radius:16px;padding:14px;text-align:center}
+.qrItem img{width:100%;max-width:150px;aspect-ratio:1/1;object-fit:contain;border-radius:12px;background:#fff;padding:8px;margin:0 auto 10px;display:block}
+.qrLabel{font-size:13px;font-weight:900;color:rgba(255,255,255,.84)}
+.finalLine{text-align:center;margin:14px 0 4px;color:rgba(255,255,255,.82);font-size:14px;line-height:1.8;font-weight:700}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:rgba(15,23,42,.94);border:1px solid rgba(255,255,255,.1);padding:10px 16px;border-radius:12px;color:#fff;font-size:13px;display:none;z-index:99}
+@media(max-width:520px){.page{padding:16px}.logo{font-size:48px}.card{padding:22px;border-radius:20px}.qtext{font-size:16px}.code{font-size:34px}.name{font-size:24px}.qrGrid{grid-template-columns:1fr}.qrItem img{max-width:180px}body:after{font-size:46px}}
+</style>
+</head>
+<body>
+<section class="page active" id="home">
+  <div class="card">
+    <div class="logo">梗BTI</div>
+    <div class="sub">你处于哪个梗年代？</div>
+    <div class="meta">// GENG-BTI v3.0 · 日常场景版<br>20道SBTI式场景题 · 80个不重复回复 · 6种梗年代人格</div>
+    <div class="rule">
+      <div>每题都是一个具体日常情境，选择你最自然会说出口的一句。</div>
+      <div>系统会根据你选择的梗的新旧程度、接梗反应和表达浓度，判断你的梗年代。</div>
+      <div>每个梗只出现一次；越新的梗不一定越好，关键是你是否能把它放进合适场景。</div>
+    </div>
+    <button class="btn" onclick="startQuiz()">▶ 开始检测梗年代</button>
+    <div class="note">本测试纯属整活，不能当真实年龄、性格或社交能力判断依据。<br>测完发现自己像草履虫，也请保持体面。</div>
+  </div>
+</section>
+<section class="page" id="quiz">
+  <div style="width:100%;max-width:700px">
+    <div class="topbar"><div class="progress"><div class="fill" id="fill"></div></div><div class="pinfo"><span id="count">1 / 20</span><span id="zone">// daily meme scene</span></div></div>
+    <div class="card"><div class="qtext" id="qtext"></div><div class="opts" id="opts"></div></div>
+  </div>
+</section>
+<section class="page" id="loading">
+  <div class="loader"><div class="big" id="loadText">正在扫描你的梗DNA...</div><div class="loaderbar"><div class="loaderinner" id="loadBar"></div></div><div class="note">// analyzing meme_age_index.exe</div></div>
+</section>
+<section class="page" id="result">
+  <div class="card" id="resultCard">
+    <div class="resultHero" id="hero"><div class="badge">梗BTI · Meme Behavior Type Indicator</div><div class="code" id="rcode"></div><div class="name" id="rname"></div><div class="tag" id="rtag"></div><div class="pills" id="pills"></div></div>
+    <div class="section"><div class="st">测试结论</div><div class="desc"><strong id="resultSummary"></strong></div></div>
+    <div class="section"><div class="st">你的梗年代指数</div><div class="scorebox"><div class="scorebar"><div class="scorefill" id="scorefill"></div></div><div class="scorelabel" id="scorelabel"></div></div><div class="desc" id="scoretext" style="margin-top:10px"></div></div>
+    <div class="section"><div class="st">人格说明</div><div class="desc" id="rdesc"></div></div>
+    <div class="section"><div class="st">六种梗BTI人格</div><div class="list" id="typeList"></div></div>
+    <div class="qrSection"><div class="qrTitle">关注奥星热浪，解锁更多梗圈现场</div><div class="qrGrid"><div class="qrItem"><img src="qr_douyin.png" alt="抖音二维码"><div class="qrLabel">抖音</div></div><div class="qrItem"><img src="qr_wecom.png" alt="企微二维码"><div class="qrLabel">企微</div></div><div class="qrItem"><img src="qr_xiaohongshu.png" alt="小红书二维码"><div class="qrLabel">小红书</div></div><div class="qrItem"><img src="qr_bilibili.png" alt="B站二维码"><div class="qrLabel">B站</div></div></div></div>
+    <div class="finalLine">梗圈狂欢已就位，《奥星热浪》预约火热进行中！</div>
+    <div class="actions"><button class="btn" onclick="copyShare()">复制分享文案</button><button class="btn ghost" onclick="restart()">重新测试</button></div>
+    <div class="note">梗BTI · 日常场景版 · 仅供娱乐</div>
+  </div>
+</section>
+<div class="toast" id="toast"></div>
+<script>
+const questions=[{"text": "Q1  🍽️ 周末约饭，本来约好七点，朋友六点五十五突然说改到九点，你最可能回哪句？", "opts": [{"t": "我去不早说。", "era": 5, "meme": "我去不早说"}, {"t": "我真的会谢。", "era": 4, "meme": "我真的会谢"}, {"t": "你们真是城会玩。", "era": 2, "meme": "城会玩"}, {"t": "好吧，那我再看看。", "era": 0, "meme": "好吧"}]}, {"text": "Q2  💼 开会快结束时，领导突然说“还有一个小需求，很简单”，你心里第一句是？", "opts": [{"t": "班味一下就上来了。", "era": 5, "meme": "班味"}, {"t": "栓Q了。", "era": 4, "meme": "栓Q"}, {"t": "坑爹啊。", "era": 1, "meme": "坑爹"}, {"t": "收到，我处理一下。", "era": 0, "meme": "收到"}]}, {"text": "Q3  📸 合照里你闭眼又歪嘴，朋友还准备直接发朋友圈，你会说？", "opts": [{"t": "我要验牌，没验过不能发。", "era": 5, "meme": "我要验牌"}, {"t": "这是社死现场。", "era": 4, "meme": "社死"}, {"t": "我裂开了。", "era": 3, "meme": "我裂开了"}, {"t": "能不能换一张？", "era": 0, "meme": "换一张"}]}, {"text": "Q4  🌿 朋友发了一组很精致的周末照片，配文却很随意，你会怎么评论？", "opts": [{"t": "这条朋友圈活人感很足。", "era": 5, "meme": "活人感"}, {"t": "绝绝子。", "era": 4, "meme": "绝绝子"}, {"t": "宝藏生活。", "era": 3, "meme": "宝藏"}, {"t": "拍得挺好。", "era": 0, "meme": "挺好"}]}, {"text": "Q5  🥡 外卖迟到四十分钟，送来时汤还洒了一半，你打开袋子的瞬间会说？", "opts": [{"t": "如何呢，又能怎。", "era": 5, "meme": "如何呢又能怎"}, {"t": "完了，芭比Q了。", "era": 4, "meme": "芭比Q了"}, {"t": "蓝瘦香菇。", "era": 2, "meme": "蓝瘦香菇"}, {"t": "算了，下次注意吧。", "era": 0, "meme": "算了"}]}, {"text": "Q6  📚 小组作业周五交，周四晚上队友还说“我刚看到消息”，你会回？", "opts": [{"t": "你不乘。", "era": 5, "meme": "你不乘"}, {"t": "小丑竟是我自己。", "era": 4, "meme": "小丑竟是我自己"}, {"t": "人艰不拆。", "era": 1, "meme": "人艰不拆"}, {"t": "你什么时候有空做？", "era": 0, "meme": "什么时候有空"}]}, {"text": "Q7  🧑‍🤝‍🧑 亲戚又问你“怎么还不谈恋爱”，你最想用哪句挡回去？", "opts": [{"t": "不知道，我的身材很曼妙。", "era": 5, "meme": "不知道，我的身材很曼妙"}, {"t": "尊嘟假嘟？", "era": 4, "meme": "尊嘟假嘟"}, {"t": "吓死宝宝了。", "era": 2, "meme": "吓死宝宝了"}, {"t": "这个问题先跳过。", "era": 0, "meme": "先跳过"}]}, {"text": "Q8  📱 朋友拉你一起看聊天记录，逐字分析对方到底是什么意思，你会说？", "opts": [{"t": "这就是赛博对账。", "era": 5, "meme": "赛博对账"}, {"t": "看完我破防了。", "era": 4, "meme": "破防了"}, {"t": "元芳，你怎么看？", "era": 1, "meme": "元芳你怎么看"}, {"t": "我帮你分析一下。", "era": 0, "meme": "分析一下"}]}, {"text": "Q9  😂 朋友讲了一个只有你能get到的冷笑话，全桌沉默，只有你笑到拍桌，你会说？", "opts": [{"t": "咱俩真是低山臭水遇知音。", "era": 5, "meme": "低山臭水遇知音"}, {"t": "xswl。", "era": 3, "meme": "xswl"}, {"t": "2333。", "era": 1, "meme": "2333"}, {"t": "哈哈哈。", "era": 0, "meme": "哈哈哈"}]}, {"text": "Q10  🧾 同事把他没做完的部分说成“我们这边还差一点”，你听到后会怎么吐槽？", "opts": [{"t": "你已急哭。", "era": 5, "meme": "你已急哭"}, {"t": "大冤种竟是我。", "era": 4, "meme": "大冤种"}, {"t": "no zuo no die。", "era": 2, "meme": "no zuo no die"}, {"t": "我先把情况说清楚。", "era": 0, "meme": "说清楚"}]}, {"text": "Q11  🛍️ 朋友试衣服问“这件显不显普通”，你会怎么接？", "opts": [{"t": "衣服基础，身材不基础。", "era": 5, "meme": "xx基础，xx不基础"}, {"t": "拿来吧你。", "era": 4, "meme": "拿来吧你"}, {"t": "贫穷限制了我的想象。", "era": 3, "meme": "贫穷限制了我的想象"}, {"t": "还行吧。", "era": 0, "meme": "还行吧"}]}, {"text": "Q12  🎬 朋友疯狂安利一部剧，讲了三分钟人物关系还没讲完，你会说？", "opts": [{"t": "我将辞职在家研究这部剧。", "era": 5, "meme": "我将辞职在家研究"}, {"t": "这剧yyds。", "era": 4, "meme": "yyds"}, {"t": "确认过眼神，是我要追的剧。", "era": 3, "meme": "确认过眼神"}, {"t": "我有空看看。", "era": 0, "meme": "有空看看"}]}, {"text": "Q13  🏃 早八课还有五分钟开始，你一边拎早餐一边冲进电梯，这一刻你的内心是？", "opts": [{"t": "从从容容、游刃有余；匆匆忙忙、连滚带爬。", "era": 5, "meme": "从从容容游刃有余，匆匆忙忙连滚带爬"}, {"t": "奥利给，冲。", "era": 3, "meme": "奥利给"}, {"t": "用尽洪荒之力。", "era": 2, "meme": "洪荒之力"}, {"t": "我快到了。", "era": 0, "meme": "快到了"}]}, {"text": "Q14  🏋️ 朋友说只是轻松运动，结果上来就是高强度间歇训练，你会说？", "opts": [{"t": "这是健身邪修吧。", "era": 5, "meme": "邪修"}, {"t": "退退退。", "era": 4, "meme": "退退退"}, {"t": "友谊的小船说翻就翻。", "era": 2, "meme": "友谊的小船说翻就翻"}, {"t": "我有点累。", "era": 0, "meme": "有点累"}]}, {"text": "Q15  🫢 朋友讲八卦越讲越细，已经开始复盘时间线和证据链，你会怎么拦？", "opts": [{"t": "不讲不讲。", "era": 5, "meme": "不讲不讲"}, {"t": "吃瓜群众已就位。", "era": 2, "meme": "吃瓜群众"}, {"t": "火钳刘明。", "era": 1, "meme": "火钳刘明"}, {"t": "然后呢？", "era": 0, "meme": "然后呢"}]}, {"text": "Q16  🌙 深夜刷到前任动态，对方看起来过得特别好，你发给朋友时会配什么？", "opts": [{"t": "我开始外耗了。", "era": 5, "meme": "外耗"}, {"t": "emo了。", "era": 4, "meme": "emo了"}, {"t": "我酸了。", "era": 3, "meme": "我酸了"}, {"t": "有点难受。", "era": 0, "meme": "难受"}]}, {"text": "Q17  🧹 家里人嫌你房间乱，你环顾一圈后决定用一句话解释现状：", "opts": [{"t": "这是预制整洁。", "era": 5, "meme": "预制xx"}, {"t": "好家伙。", "era": 3, "meme": "好家伙"}, {"t": "重要的事情说三遍。", "era": 2, "meme": "重要的事情说三遍"}, {"t": "我等会儿收拾。", "era": 0, "meme": "等会儿收拾"}]}, {"text": "Q18  🧩 群聊里突然有人发了一个你没见过的新梗，大家都在等你接，你会怎么反应？", "opts": [{"t": "望周知。", "era": 5, "meme": "望周知"}, {"t": "听我说谢谢你。", "era": 4, "meme": "听我说谢谢你"}, {"t": "awsl。", "era": 3, "meme": "awsl"}, {"t": "这是什么意思？", "era": 0, "meme": "什么意思"}]}, {"text": "Q19  🥂 同学聚会有人一直炫耀升职、旅行、存款，你低头喝水时心里会冒出哪句？", "opts": [{"t": "爱你老己。", "era": 5, "meme": "爱你老己"}, {"t": "你人还怪好嘞。", "era": 4, "meme": "你人还怪好嘞"}, {"t": "是个狼人。", "era": 3, "meme": "是个狼人"}, {"t": "厉害了我的哥。", "era": 2, "meme": "厉害了我的哥"}]}, {"text": "Q20  🧃 忙完一整天，你坐下来准备给今天做个总结，你会选哪句当人生状态？", "opts": [{"t": "敬自己一杯。", "era": 5, "meme": "敬自己一杯"}, {"t": "爷青回。", "era": 3, "meme": "爷青回"}, {"t": "神马都是浮云。", "era": 1, "meme": "神马都是浮云"}, {"t": "可以可以。", "era": 0, "meme": "可以可以"}]}];
+const results=[{"key": "AMOEBA", "name": "草履虫", "range": "0.0—0.7", "tag": "梗是什么？我只会安全回复。", "pills": ["低风险发言", "跟着笑", "不主动造梗"], "color": "#94a3b8", "desc": "你不是完全不懂梗，而是更习惯用普通表达保命。群里热闹时，你会先观察大家怎么说，再选择一个最安全的回复。你的优势是不会轻易尴尬，缺点是很难靠一句话把气氛点燃。"}, {"key": "DINOSAUR", "name": "恐龙", "range": "0.7—1.7", "tag": "远古互联网的化石，还在发光。", "pills": ["贴吧QQ空间", "古早冲浪", "经典老梗"], "color": "#22c55e", "desc": "你的梗库带着明显的古早互联网气息，像“2333”“坑爹”“神马都是浮云”这类表达在你这里仍然有生命力。你不一定追最新热梗，但你一开口就能让人感到一股早期中文互联网味。"}, {"key": "PRIMITIVE", "name": "原始人", "range": "1.7—2.7", "tag": "移动互联网初期的快乐还没过期。", "pills": ["微博名场面", "综艺热词", "早期短视频"], "color": "#f97316", "desc": "你的梗主要集中在2013—2016年前后，情绪表达直接、好懂、有画面感。你会用“蓝瘦香菇”“洪荒之力”“友谊的小船说翻就翻”这类梗接住场面，虽然不算最新，但熟人局里依然有效。"}, {"key": "TERRACOTTA", "name": "兵马俑", "range": "2.7—3.7", "tag": "经典梗守护者，开口就是时代切片。", "pills": ["弹幕文化", "短视频初代", "经典稳定"], "color": "#eab308", "desc": "你掌握的是一批经过时间沉淀的高识别度梗，比如“我裂开了”“确认过眼神”“awsl”。你的玩梗方式不追求最前沿，但非常稳，适合在大多数社交场景里制造熟悉感。"}, {"key": "QING", "name": "清朝人", "range": "3.7—4.6", "tag": "曾经很潮，现在开始慢半拍。", "pills": ["短视频高频", "旧新交界", "热梗库存"], "color": "#a855f7", "desc": "你熟悉2021—2023年那批高频热梗，比如“栓Q”“尊嘟假嘟”“yyds”“emo了”。这些梗曾经非常潮，现在已经进入半经典状态。你不是完全落后，只是离最前排冲浪区还有一点距离。"}, {"key": "CYBER", "name": "赛博造物主", "range": "4.6—5.0", "tag": "你不是在接梗，你是在更新梗库。", "pills": ["最新热梗", "抽象表达", "二创能力"], "color": "#06b6d4", "desc": "你对2025—2026年的新梗、抽象句式和评论区语言非常敏感，能把“曼妙”“赛博对账”“不讲不讲”“低山臭水遇知音”等表达放进合适场景。你不仅会接梗，还很可能把普通句子改造成新梗。"}];
+let cur=0, selected=[], resultType=null, avg=0;
+function show(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active')}
+function startQuiz(){cur=0;selected=[];show('quiz');renderQ()}
+function renderQ(){
+  const q=questions[cur];
+  document.getElementById('fill').style.width=((cur+1)/questions.length*100)+'%';
+  document.getElementById('count').textContent=(cur+1)+' / '+questions.length;
+  document.getElementById('zone').textContent=cur<7?'// 日常反应区':cur<14?'// 社交接梗区':'// 梗年代确诊区';
+  document.getElementById('qtext').textContent=q.text;
+  const box=document.getElementById('opts');box.innerHTML='';
+  q.opts.forEach((o,i)=>{const d=document.createElement('div');d.className='opt';d.dataset.letter=['A','B','C','D','E'][i];d.textContent=o.t;d.onclick=()=>selectOpt(i);box.appendChild(d)})
+}
+function selectOpt(i){
+  document.querySelectorAll('.opt').forEach(o=>o.classList.remove('selected'));
+  document.querySelectorAll('.opt')[i].classList.add('selected');
+  selected.push(questions[cur].opts[i]);
+  setTimeout(()=>{cur++;cur<questions.length?renderQ():loading()},260);
+}
+function loading(){
+  show('loading');
+  const msgs=['正在扫描你的梗DNA...','正在比对古早论坛与短视频语料...','正在计算梗年代指数...','分析完成！你的梗BTI已确诊'];
+  let n=0;const bar=document.getElementById('loadBar'),txt=document.getElementById('loadText');bar.style.width='0';txt.textContent=msgs[0];
+  const t=setInterval(()=>{n++;bar.style.width=(n*25)+'%';txt.textContent=msgs[Math.min(n,3)];if(n>=4){clearInterval(t);setTimeout(showResult,350)}},430)
+}
+function calcType(v){
+  if(v<0.7) return results[0];
+  if(v<1.7) return results[1];
+  if(v<2.7) return results[2];
+  if(v<3.7) return results[3];
+  if(v<4.6) return results[4];
+  return results[5];
+}
+function showResult(){
+  avg=selected.reduce((a,b)=>a+b.era,0)/selected.length;
+  resultType=calcType(avg);
+  const c=resultType.color;
+  document.documentElement.style.setProperty('--accent',c);
+  document.getElementById('hero').style.background='linear-gradient(180deg,'+c+'33,rgba(255,255,255,.04))';
+  document.getElementById('rcode').textContent=resultType.key;
+  document.getElementById('rcode').style.textShadow='0 0 24px '+c+'99';
+  document.getElementById('rname').textContent=resultType.name;
+  document.getElementById('rtag').textContent='“'+resultType.tag+'”';
+  document.getElementById('resultSummary').textContent='你的测试结果是：'+resultType.name+'（'+resultType.key+'）';
+  document.getElementById('rdesc').textContent=resultType.desc;
+  const pills=document.getElementById('pills');pills.innerHTML='';
+  resultType.pills.forEach(p=>{const s=document.createElement('span');s.className='pill';s.textContent=p;pills.appendChild(s)});
+  document.getElementById('scorefill').style.width=(avg/5*100)+'%';
+  document.getElementById('scorelabel').textContent=avg.toFixed(2)+' / 5.00';
+  document.getElementById('scoretext').textContent='数值越接近5，代表越偏最新热梗和抽象表达；越接近0，代表越偏普通回复或低梗浓度表达。你的区间是：'+resultType.range+'。';
+  const list=document.getElementById('typeList');list.innerHTML='';
+  results.forEach(t=>{const on=t.key===resultType.key;const item=document.createElement('div');item.className='item'+(on?' active':'');item.style.setProperty('--activebg',t.color+'22');item.style.setProperty('--now',t.color);item.innerHTML='<div class="itemtop"><div class="itemname" style="color:'+(on?t.color:'rgba(255,255,255,.78)')+'">'+t.name+' · '+t.range+'</div>'+(on?'<span class="now">当前</span>':'')+'</div><div class="itemdesc">'+t.tag+'</div>';list.appendChild(item)});
+  show('result');
+}
+function shareText(){return `【梗BTI】我被确诊为「${resultType.name}」！\n“${resultType.tag}”\n我的梗年代指数：${avg.toFixed(2)} / 5.00\n\n20道日常场景题，测测你处于哪个梗年代。`; }
+function copyShare(){const text=shareText();if(navigator.clipboard)navigator.clipboard.writeText(text).then(()=>toast('已复制分享文案 ✓')).catch(()=>fallback(text));else fallback(text)}
+function fallback(text){const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);toast('已复制分享文案 ✓')}
+function restart(){show('home')}
+function toast(t){const el=document.getElementById('toast');el.textContent=t;el.style.display='block';setTimeout(()=>el.style.display='none',1800)}
+</script>
+</body>
+</html>
